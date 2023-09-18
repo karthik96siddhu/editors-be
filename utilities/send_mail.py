@@ -2,6 +2,10 @@ from flask_mail import Message, Mail
 from flask import render_template
 from utilities.generate_doc import generate_doc
 import io
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 mail = Mail()
 
@@ -32,18 +36,32 @@ def send_mail(user_data):
     workbook.save(xlsx_stream)
     xlsx_stream.seek(0)
 
+    sender_mail = os.getenv('MAIL_USERNAME')
 
-    msg = Message(
-                sender ='edit0r2ise@gmail.com',
-                recipients = ['edit0r2ise@gmail.com']
+    # mail to customer
+    mail_to_customer = Message(
+        sender= sender_mail,
+        recipients=[email]
+    )
+    mail_to_customer.subject = 'Editorise team'
+    mail_to_customer.html = render_template('customer_template.html', couple_name=couple_name)
+    mail.send(mail_to_customer)
+
+    # mail to editorise team
+    mail_to_team = Message(
+                sender =sender_mail,
+                recipients = [sender_mail]
                )
-    msg.subject = 'New customer'
-    msg.html = render_template('email_template.html', studio_name=studio_name,
+    mail_to_team.subject = 'New customer'
+    mail_to_team.html = render_template('email_template.html', studio_name=studio_name,
                                email=email, contact_number=contact_number,
                                couple_name=couple_name, wedding_date=wedding_date,
                                source_link=source_link,file_size=file_size,
                                highlight=highlight,music_option=music_option,
                                order_date=order_date,description=description)
-    msg.attach(filename=file_name, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', data=xlsx_stream.read())
+    mail_to_team.attach(filename=file_name, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', data=xlsx_stream.read())
                                 
-    mail.send(msg)
+    mail.send(mail_to_team)
+
+    
+    

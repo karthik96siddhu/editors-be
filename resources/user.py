@@ -5,6 +5,7 @@ from pymongo import ReturnDocument
 from config.db import collection
 from datetime import datetime
 from utilities.send_mail import send_mail
+from utilities.generate_doc import convert_json_to_docx_table
 
 class UserListApi(Resource):
 
@@ -81,6 +82,8 @@ class UserApi(Resource):
                 "description" : document['description'],
                 "created_at" : str(document['created_at']) 
                 }
+                # resp = convert_json_to_docx_table(user)
+                # print(resp)
                 return {"user": user, "message": "success"}, 200
             else:
                 return {"message": "document not found!"}, 404
