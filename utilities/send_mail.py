@@ -44,7 +44,7 @@ def send_mail(user_data):
         recipients=[email]
     )
     mail_to_customer.subject = 'Editorise team'
-    mail_to_customer.html = render_template('customer_template.html', couple_name=couple_name)
+    mail_to_customer.html = render_template('customer_template.html', studio_name=studio_name)
     mail.send(mail_to_customer)
 
     # mail to editorise team
