@@ -2,17 +2,20 @@ from flask_restful import Resource
 from flask import request
 from bson import ObjectId
 from pymongo import ReturnDocument
+import pymongo
 from config.db import collection
 from datetime import datetime
 from utilities.send_mail import send_mail
 from utilities.generate_doc import convert_json_to_docx_table
+from wrapper.jwt_required import jwt_required
 
 class UserListApi(Resource):
 
+    @jwt_required
     def get(self):
         try:
             users = []
-            for doc in collection.find():
+            for doc in collection.find().sort('created_at', pymongo.DESCENDING):
                 document = {
                 "_id": str(doc["_id"]),
                 "studio_name" : doc['studio_name'],
@@ -62,6 +65,7 @@ class UserListApi(Resource):
 
 class UserApi(Resource):
 
+    @jwt_required
     def get(self, id):
         try:
             user = {}
@@ -89,7 +93,7 @@ class UserApi(Resource):
                 return {"message": "document not found!"}, 404
         except Exception as e:
             return {"message": "Error while fetching document", "error": str(e)}, 500
-        
+    
     def put(self, id):
         try:
             document = request.get_json()
@@ -134,7 +138,8 @@ class UserApi(Resource):
                 return {"message": "Failed to update document"}, 404
         except Exception as e:
             return {"message": "Error while updating document", "error": str(e)}, 500
-        
+    
+    @jwt_required
     def delete(self, id):
         try:
             document = collection.find_one_and_delete({"_id": ObjectId(id)})

@@ -5,7 +5,9 @@ from dotenv import load_dotenv
 from flask_mail import Mail
 import os
 from resources.user import UserListApi, UserApi
+from resources.login import LoginApi
 from utilities.send_mail import send_mail
+from utilities.default_super_admin import insert_default_super_admin
 
 load_dotenv()
 
@@ -20,10 +22,14 @@ app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+# insert super_admin-user
+insert_default_super_admin()
+
 CORS(app)
 mail =  Mail(app)
 api = Api(app)
 
+api.add_resource(LoginApi, '/api/v1/login', methods=['POST'])
 api.add_resource(UserListApi, '/api/v1/users', methods=["GET", "POST"])
 api.add_resource(UserApi, '/api/v1/user/<string:id>', methods=["GET", "PUT", "DELETE"])
 
