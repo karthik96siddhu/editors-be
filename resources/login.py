@@ -20,7 +20,6 @@ class LoginApi(Resource):
             if not super_admin:
                 return {"message": "User not found"}, 404
             if check_password_hash(super_admin["password"], password):
-                print('hey')
                 # Create a JWT token with user's username and an expiration time
                 token = jwt.encode(
                     {
