@@ -22,19 +22,19 @@ def send_mail(user_data):
     order_date = user_data['order_date']
     description = user_data['description']
 
-    file_name = couple_name.replace(" ", '-') + '.xlsx'
-    table_data = [
-        ['studio_name', 'email', 'contact_number', 'couple_name', 'wedding_date', 
-        'source_link', 'file_size', 'highlight', 'music_option', 'order_date', 'description'],
-        [studio_name, email, contact_number, couple_name, wedding_date, source_link,
-         file_size, highlight, music_option, order_date, description]
-    ]
-    workbook = generate_doc(table_data)
+    # file_name = couple_name.replace(" ", '-') + '.xlsx'
+    # table_data = [
+    #     ['studio_name', 'email', 'contact_number', 'couple_name', 'wedding_date', 
+    #     'source_link', 'file_size', 'highlight', 'music_option', 'order_date', 'description'],
+    #     [studio_name, email, contact_number, couple_name, wedding_date, source_link,
+    #      file_size, highlight, music_option, order_date, description]
+    # ]
+    # workbook = generate_doc(table_data)
 
     # Convert .xlsx content to bytes
-    xlsx_stream = io.BytesIO()
-    workbook.save(xlsx_stream)
-    xlsx_stream.seek(0)
+    # xlsx_stream = io.BytesIO()
+    # workbook.save(xlsx_stream)
+    # xlsx_stream.seek(0)
 
     sender_mail = os.getenv('MAIL_USERNAME')
 
@@ -59,7 +59,7 @@ def send_mail(user_data):
                                source_link=source_link,file_size=file_size,
                                highlight=highlight,music_option=music_option,
                                order_date=order_date,description=description)
-    mail_to_team.attach(filename=file_name, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', data=xlsx_stream.read())
+    # mail_to_team.attach(filename=file_name, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', data=xlsx_stream.read())
                                 
     mail.send(mail_to_team)
 
