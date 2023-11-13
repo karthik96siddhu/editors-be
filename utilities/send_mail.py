@@ -17,7 +17,7 @@ def send_mail(user_data):
     wedding_date = user_data['wedding_date']
     source_link = user_data['source_link']
     file_size = user_data['file_size']
-    highlight = user_data['highlight']
+    highlight = ", ".join(user_data['highlight'])
     music_option = ", ".join(user_data['music_option'])
     order_date = user_data['order_date']
     description = user_data['description']
