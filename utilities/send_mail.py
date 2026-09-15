@@ -63,5 +63,23 @@ def send_mail(user_data):
                                 
     mail.send(mail_to_team)
 
+
+def send_customer_contact_mail(contact_data):
+    sender_mail = os.getenv('MAIL_USERNAME')
+    owner_mail = os.getenv('OWNER_EMAIL', sender_mail)
+
+    mail_to_owner = Message(
+        sender=sender_mail,
+        recipients=[owner_mail]
+    )
+    mail_to_owner.subject = 'New customer contact'
+    mail_to_owner.html = render_template(
+        'customer_contact_email.html',
+        email=contact_data['email'],
+        phone=contact_data.get('phone'),
+        website=contact_data.get('website')
+    )
+    mail.send(mail_to_owner)
+
     
     
